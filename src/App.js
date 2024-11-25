@@ -4,8 +4,8 @@ import './App.css';
 function App() {
   // Hook useState per gestire la lista dei prodotti
   const [products, setProducts] = useState([
-    { id: 1, name: 'Laptop' },
-    { id: 2, name: 'Smartphone' },
+    { id: 1, name: 'Laptop', completed: false },
+    { id: 2, name: 'Smartphone', completed: false },
   ]);
 
   // Hook useState per il nuovo prodotto
@@ -14,9 +14,18 @@ function App() {
   // Funzione per gestire l'aggiunta di un nuovo prodotto
   const addProduct = () => {
     if (newProduct.trim() !== '') {
-      setProducts([...products, { id: products.length + 1, name: newProduct }]);
+      setProducts([...products, { id: products.length + 1, name: newProduct, completed: false }]);
       setNewProduct(''); // Resetta il campo input
     }
+  };
+
+  // Funzione per gestire il completamento di un prodotto
+  const toggleProductCompletion = (id) => {
+    setProducts(
+      products.map((product) =>
+        product.id === id ? { ...product, completed: !product.completed } : product
+      )
+    );
   };
 
   return (
@@ -25,7 +34,13 @@ function App() {
         <h1>Lista dei Prodotti</h1>
         <ul className="product-list">
           {products.map((product) => (
-            <li key={product.id} className="product-item">{product.name}</li>
+            <li
+              key={product.id}
+              className={`product-item ${product.completed ? 'completed' : ''}`}
+              onClick={() => toggleProductCompletion(product.id)}
+            >
+              {product.name}
+            </li>
           ))}
         </ul>
         <div className="add-product">
